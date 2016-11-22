@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var IMDBxmlSchema = mongoose.Schema({
-    id: {
+    url: {
         type: String,
         required: true,
         unique: true
