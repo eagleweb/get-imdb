@@ -1,20 +1,12 @@
 var fetch = require('node-fetch');
 var mongoose = require('mongoose');
 var IMDBid = require('./models/IMDBid');
-var IMDBxml = require('./models/IMDBxml');
 var mongodbUri = 'mongodb://eagleweb:751803orel@ds159377.mlab.com:59377/imdb';
-mongoose.connect(mongodbUri);
-
-var db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'connection error:'));
-
-db.once('open', function callback () {});
 
 var reg_exp = /tt\d\d\d\d\d\d\d/g;
 
-function readTT(url, cb) {
-    fetch(url)
+function readTT(cb) {
+    fetch('http://www.imdb.com/sitemap_US_01547.xml.gz')
         .then(function (res) {
             return res.text();
         }).then(function (body) {
@@ -34,7 +26,15 @@ function unique(arr, cb) {
 }
 
 function writeDB(arr){
-        arr.forEach(function(item){
+    mongoose.connect(mongodbUri);
+
+    var db = mongoose.connection;
+
+    db.on('error', console.error.bind(console, 'connection error:'));
+
+    db.once('open', function callback () {
+
+        arr.forEach(function(item, i , arr){
             var temp = new IMDBid ({
                 id: item
             });
@@ -44,17 +44,7 @@ function writeDB(arr){
                 }
             });
         });
-}
-
-function go() {
-    IMDBxml.find(function (err, imdbxml) {
-    if (err) return console.error(err);
-    imdbxml.forEach(function (obj) {
-        var url = obj.url;
-        var temp = readTT(url, unique);
-        setTimeout(temp, 60000);
-    })
     });
 }
 
-go();
+readTT(unique);
