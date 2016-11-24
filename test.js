@@ -9,13 +9,22 @@ db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function callback () {});
 
-IMDBxml.find(function (err, imdbxml) {
-    if (err) return console.error(err);
-    imdbxml.forEach(function (obj) {
-        var temp = obj.url;
-        console.log(typeof temp);
-    })
-});
+
+
+
+// function go() {
+//     var i = 0;
+//     IMDBxml.find(function (err, imdbxml) {
+//         if (err) return console.error(err);
+//         var timerid = setInterval(function () {
+//             console.log(imdbxml[i].url);
+//             i++;
+//             if (i===imdbxml.length) clearInterval(timerid);
+//         }, 6000);
+//     });
+// }
+//
+// go();
 
 
 
